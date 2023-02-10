@@ -65,6 +65,7 @@
       </el-header>
 
       <el-main>
+        <!--面包屑导航-->
         <div style="margin-bottom: 30px">
           <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
