@@ -28,6 +28,8 @@ cd vue
 npm run serve
 ```
 
+安装ElementUI：`npm i element-ui -S`
+
 
 
 
