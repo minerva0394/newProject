@@ -1,6 +1,7 @@
-package com.zzl.entity;
+package com.zzl.newprojectspring.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.sun.istack.internal.NotNull;
 import lombok.Data;
 
 import java.io.Serializable;

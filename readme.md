@@ -150,6 +150,12 @@ pom文件配置如下：
 
 #### 后端部分
 
+#### 1、
+
+已经实现集成mybatis框架，实现增删改查功能，并修改了文件框架，具体实现看提交记录
+
+#### 2、
+
 entity包中新建student表，与SQL表中字段一一对应。
 
 **其中**，createTime需要引入java.sql包，字段改为Timestamp，同时用@JsonFormat进行格式化

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zzl.newprojectspring.mapper.StudentMapper">
+
+    <update id="update">
+        update student
+        <set>
+            <if test="studentNo != null">
+                studentNo = #{studentNo},
+            </if>
+            <if test="studentPassword != null">
+                studentPassword = #{studentPassword},
+            </if>
+            <if test="studentName != null">
+                studentName = #{studentName},
+            </if>
+            <if test="studentSex != null">
+                studentSex = #{studentSex},
+            </if>
+            <if test="studentCollege != null">
+                studentCollege = #{studentCollege},
+            </if>
+            <if test="studentMajor != null">
+                studentMajor = #{studentMajor},
+            </if>
+            <if test="studentGpa != null">
+                studentGpa = #{studentGpa}
+            </if>
+        </set>
+        <where>
+            id = #{id}
+        </where>
+    </update>
+
+</mapper>
