@@ -277,3 +277,61 @@ public class studentController {
 
 ```
 
+### 2023年02月12日16:01:21
+#### 前端部分
+解决跨域请求：
+
+一、在后端controller类中添加@CrossOrigin注解
+
+>跨域，指的是浏览器不能执行其他网站的脚本。它是由浏览器的同源策略造成的，是浏览器对JavaScript施加的安全限制。
+>所谓同源是指，域名，协议，端口均相同，不明白没关系，举个栗子：
+>http://www.123.com/index.html 调用 http://www.123.com/server.PHP （非跨域）
+>http://www.123.com/index.html 调用 http://www.456.com/server.php （主域名不同:123/456，跨域）
+>http://abc.123.com/index.html 调用 http://def.123.com/server.php（子域名不同:abc/def，跨域）
+>http://www.123.com:8080/index.html调用 http://www.123.com:8081/server.php（端口不同:8080/8081，跨域）
+>http://www.123.com/index.html 调用 https://www.123.com/server.php（协议不同:http/https，跨域）
+>请注意：localhost和127.0.0.1虽然都指向本机，但也属于跨域。
+>浏览器执行javascript脚本时，会检查这个脚本属于哪个页面，如果不是同源页面，就不会被执行。
+>
+>当域名www.abc.com下的js代码去访问www.def.com域名下的资源，就会受到限制。
+>
+>@CrossOrigin可以处理跨域请求，让你能访问不是一个域的文件。
+
+二、后端common包中添加对应config
+
+~~~java
+package com.zzl.newprojectspring.common;
+
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
+/**
+ * 配置跨域请求
+ */
+public class CorsConfig {
+
+    // 当前跨域请求最大有效时长。这里默认1天
+    private static final long MAX_AGE = 24 * 60 * 60;
+
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.addAllowedOrigin("http://localhost:8080"); // 1 设置访问源地址
+        corsConfiguration.addAllowedHeader("*"); // 2 设置访问源请求头
+        corsConfiguration.addAllowedMethod("*"); // 3 设置访问源请求方法
+        corsConfiguration.setMaxAge(MAX_AGE);
+        source.registerCorsConfiguration("/**", corsConfiguration); // 4 对接口配置跨域设置
+        return new CorsFilter(source);
+    }
+}
+
+~~~
+
+#### 后端部分
+
+实现模糊查询，前端显示数据库具体模拟数据

@@ -56,7 +56,7 @@
         </div>
         <el-dropdown style="width: 70px; cursor: pointer">
           <span>王小虎</span><i class="el-icon-arrow-down" style="margin-left: 5px"></i>
-          <el-dropdown-menu slot="dropdown" >
+          <el-dropdown-menu slot="dropdown">
             <el-dropdown-item style="font-size: 14px; padding: 5px 0">个人信息</el-dropdown-item>
             <el-dropdown-item style="font-size: 14px; padding: 5px 0">退出</el-dropdown-item>
           </el-dropdown-menu>
@@ -74,10 +74,18 @@
         </div>
 
         <div style="margin: 10px 0">
-          <el-input style="width: 200px" placeholder="请输入名称" suffix-icon="el-icon-search"></el-input>
-          <el-input style="width: 200px" placeholder="请输入邮箱" suffix-icon="el-icon-message" class="ml-5"></el-input>
-          <el-input style="width: 200px" placeholder="请输入地址" suffix-icon="el-icon-position" class="ml-5"></el-input>
-          <el-button class="ml-5" type="primary">搜索</el-button>
+          <el-input style="width: 200px;margin-right: 10px" placeholder="请输入学生学号" suffix-icon="el-icon-search"
+                    v-model="studentNo" clearable></el-input>
+          <el-input style="width: 200px;margin-right: 10px" placeholder="请输入学生名称" suffix-icon="el-icon-search"
+                    v-model="studentName" clearable></el-input>
+          <el-input style="width: 200px;margin-right: 10px" placeholder="请输入学生性别" suffix-icon="el-icon-search"
+                    v-model="studentSex" clearable></el-input>
+          <el-input style="width: 200px;margin-right: 10px" placeholder="请输入学生专业" suffix-icon="el-icon-search"
+                    v-model="studentMajor" clearable></el-input>
+
+          <!--          <el-input style="width: 200px" placeholder="请输入邮箱" suffix-icon="el-icon-message" class="ml-5"></el-input>-->
+          <!--          <el-input style="width: 200px" placeholder="请输入地址" suffix-icon="el-icon-position" class="ml-5"></el-input>-->
+          <el-button class="ml-5" type="primary" @click="load">搜索</el-button>
         </div>
 
         <div style="margin: 10px 0">
@@ -88,26 +96,30 @@
         </div>
 
         <el-table :data="tableData" border stripe :header-cell-class-name="headerBg">
-          <el-table-column prop="date" label="日期" width="140">
-          </el-table-column>
-          <el-table-column prop="name" label="姓名" width="120">
-          </el-table-column>
-          <el-table-column prop="address" label="地址">
-          </el-table-column>
-          <el-table-column label="操作"  width="300" align="center">
+          <el-table-column prop="id" label="学生id" width="80"></el-table-column>
+          <el-table-column prop="studentNo" label="学生学号" width="120"></el-table-column>
+          <el-table-column prop="studentName" label="学生姓名" width="120"></el-table-column>
+          <el-table-column prop="studentSex" label="学生性别"></el-table-column>
+          <el-table-column prop="studentCollege" label="学院"></el-table-column>
+          <el-table-column prop="studentMajor" label="专业"></el-table-column>
+          <el-table-column prop="studentGpa" label="绩点"></el-table-column>
+          <el-table-column label="操作" width="300" align="center">
             <template slot-scope="scope">
               <el-button type="success">编辑 <i class="el-icon-edit"></i></el-button>
               <el-button type="danger">删除 <i class="el-icon-remove-outline"></i></el-button>
             </template>
           </el-table-column>
         </el-table>
+        <!--分页查询-->
         <div style="padding: 10px 0">
           <el-pagination
-
-              :page-sizes="[5, 10, 15, 20]"
-              :page-size="10"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page="pageNum"
+              :page-sizes="[10, 20, 50]"
+              :page-size="pageSize"
               layout="total, sizes, prev, pager, next, jumper"
-              :total="400">
+              :total="total">
           </el-pagination>
         </div>
       </el-main>
@@ -121,20 +133,26 @@
 export default {
   name: 'Home',
   data() {
-    const item = {
-      date: '2016-05-02',
-      name: '王小虎',
-      address: '上海市普陀区金沙江路 1518 弄'
-    };
     return {
-      tableData: Array(10).fill(item),
-      msg: "hello 青哥哥",
+      tableData: [],
+      total: 0,
+      pageNum: 1,
+      pageSize: 10,
+      studentName: "",
+      studentNo: "",
+      studentSex: "",
+      studentMajor: "",
+      msg: "学生表",
       collapseBtnClass: 'el-icon-s-fold',
       isCollapse: false,
       sideWidth: 200,
       logoTextShow: true,
-      headerBg: 'headerBg'
+      headerBg: 'headerBg',
     }
+  },
+  created() {
+    //  请求分页查询数据
+    this.load()
   },
   methods: {
     collapse() {  // 点击收缩按钮触发
@@ -148,13 +166,35 @@ export default {
         this.collapseBtnClass = 'el-icon-s-fold'
         this.logoTextShow = true
       }
-    }
+    },
+    load() {
+      fetch("http://localhost:8085/student/page?pageNum=" + this.pageNum + "&pageSize=" + this.pageSize
+          + "&studentName=" + this.studentName + "&studentNo=" + this.studentNo + "&studentSex=" + this.studentSex
+          + "&studentMajor=" + this.studentMajor)
+          .then(res => res.json()).then(res => {
+        console.log(res)
+        this.tableData = res.data;
+        this.total = res.total;
+      })
+    },
+    handleSizeChange(pageSize) {
+      console.log(pageSize)
+      this.pageSize = pageSize
+      this.load()
+    },
+    handleCurrentChange(pageNum) {
+      console.log(pageNum)
+      this.pageNum = pageNum
+      this.load()
+    },
+
+
   }
 }
 </script>
 
 <style>
 .headerBg {
-  background: #eee!important;
+  background: #eee !important;
 }
 </style>

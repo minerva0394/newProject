@@ -7,8 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/student")
 
@@ -25,6 +28,7 @@ public class studentController {
 
     /**
      * 查询接口
+     *
      * @return
      */
     @GetMapping
@@ -35,21 +39,46 @@ public class studentController {
 
     /**
      * 实现保存和新增
+     *
      * @param student
      * @return
      */
     @PostMapping
-    public Integer save(@RequestBody Student student){
+    public Integer save(@RequestBody Student student) {
         return studentService.save(student);
     }
 
     /**
      * 删除id
+     *
      * @param id
      * @return
      */
     @DeleteMapping("/{id}")
-    public Integer delete(@PathVariable Integer id){
+    public Integer delete(@PathVariable Integer id) {
         return studentMapper.deleteById(id);
+    }
+
+    /**
+     * 实现分页查询
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @GetMapping("/page")
+    public Map<String, Object> findPage(@RequestParam Integer pageNum,
+                                        @RequestParam Integer pageSize,
+                                        @RequestParam String studentName,
+                                        @RequestParam String studentNo,
+                                        @RequestParam String studentSex,
+                                        @RequestParam String studentMajor) {
+        pageNum = (--pageNum) * pageSize;
+        List<Student> data = studentMapper.selectPage(pageNum, pageSize, studentName, studentNo, studentSex, studentMajor);
+        Integer total = studentMapper.selectTotal(studentName, studentNo, studentSex, studentMajor);
+        Map<String, Object> res = new HashMap<>();
+        res.put("data", data);
+        res.put("total", total);
+        return res;
     }
 }

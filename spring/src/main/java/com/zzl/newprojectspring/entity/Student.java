@@ -1,6 +1,7 @@
 package com.zzl.newprojectspring.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.internal.NotNull;
 import lombok.Data;
 
@@ -28,6 +29,7 @@ public class Student implements Serializable {
     /**
      * 学生登录密码
      */
+    @JsonIgnore
     private String studentPassword;
 
     /**
