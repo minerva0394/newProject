@@ -335,3 +335,36 @@ public class CorsConfig {
 #### 后端部分
 
 实现模糊查询，前端显示数据库具体模拟数据
+
+Mybatis-plus依赖
+
+~~~xml
+        <!-- mybatis-plus -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>3.5.1</version>
+        </dependency>
+~~~
+
+驼峰命名法时需要注意，mybatisPlus会讲后面的大写转成下划线，需要在entity中添加注解
+
+~~~ java
+@TableField("")
+~~~
+
+后端实现swagger集成，在调试的时候，需要对参数进行如下设置
+
+```java
+@ApiImplicitParams({
+            @ApiImplicitParam(dataType = "Integer", name = "pageNum", value = "页码", required = false),
+            @ApiImplicitParam(dataType = "Integer", name = "pageSize", value = "每页数量", required = false),
+            @ApiImplicitParam(name = "studentName", value = "学生姓名", required = false),
+            @ApiImplicitParam(name = "studentNo", value = "学生学号", required = false),
+            @ApiImplicitParam(name = "studentSex", value = "学生性别", required = false),
+            @ApiImplicitParam(name = "studentMajor", value = "学生专业", required = false)
+})
+```
+
+确保datatype和数据库保持一致，确保required和业务逻辑一致
+
