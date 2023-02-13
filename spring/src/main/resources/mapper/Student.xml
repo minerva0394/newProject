@@ -6,9 +6,6 @@
     <update id="update">
         update student
         <set>
-            <if test="studentNo != null">
-                studentNo = #{studentNo},
-            </if>
             <if test="studentPassword != null">
                 studentPassword = #{studentPassword},
             </if>
@@ -29,7 +26,7 @@
             </if>
         </set>
         <where>
-            id = #{id}
+            studentNo = #{studentNo}
         </where>
     </update>
 

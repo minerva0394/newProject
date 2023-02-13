@@ -368,3 +368,139 @@ Mybatis-plus依赖
 
 确保datatype和数据库保持一致，确保required和业务逻辑一致
 
+
+
+### 2023年02月13日10:36:47
+#### 前端部分
+Axios 封装
+
+``` npm i axios -S
+npm i axios -S
+```
+
+request.js
+
+~~~ js
+import axios from 'axios'
+
+const request = axios.create({
+    baseURL: '/api',
+    timeout: 5000
+})
+
+// request 拦截器
+// 可以自请求发送前对请求做一些处理
+// 比如统一加token，对请求参数统一加密
+request.interceptors.request.use(config => {
+    config.headers['Content-Type'] = 'application/json;charset=utf-8';
+
+    // config.headers['token'] = user.token;  // 设置请求头
+    return config
+}, error => {
+    return Promise.reject(error)
+});
+
+// response 拦截器
+// 可以在接口响应后统一处理结果
+request.interceptors.response.use(
+    response => {
+        let res = response.data;
+        // 如果是返回的文件
+        if (response.config.responseType === 'blob') {
+            return res
+        }
+        // 兼容服务端返回的字符串数据
+        if (typeof res === 'string') {
+            res = res ? JSON.parse(res) : res
+        }
+        return res;
+    },
+    error => {
+        console.log('err' + error) // for debug
+        return Promise.reject(error)
+    }
+)
+
+
+export default request
+
+~~~
+
+Homevue.js
+
+封装方法
+
+~~~ js
+      this.request.get("http://localhost:8085/student/page?",{
+        params:{
+          pageNum:this.pageNum,
+          pageSize:this.pageSize,
+          studentName:this.studentName,
+          studentNo:this.studentNo,
+          studentSex:this.studentSex,
+          studentMajor:this.studentMajor
+        }
+      }).then(res => {
+        console.log()
+        this.total = res.total
+        this.tableData = res.records
+      })
+~~~
+
+
+
+### 2023年02月14日00:10:25
+
+已实现vue的增删改查，接口描述方式统一
+
+#### 后端部分
+
+数据库字段新增逻辑删除符号位
+
+```properties
+#逻辑删除配置
+# 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)
+mybatis-plus.global-config.db-config.logic-delete-field=deleted
+# 逻辑已删除值(默认为 1)
+mybatis-plus.global-config.db-config.logic-delete-value= 1
+# 逻辑未删除值(默认为 0)
+mybatis-plus.global-config.db-config.logic-not-delete-value= 0
+```
+
+```java
+/**
+ * 逻辑删除符号位
+ */
+@ApiModelProperty(value = "是否删除，0=存在，1=删除")
+@TableLogic
+private Integer deleted;
+```
+
+
+
+```java
+//设置分页插件属性，请求页超出范围时，返回上一页
+PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor(DbType.MYSQL);
+paginationInnerInterceptor.setOverflow(true);
+```
+
+设置分页，删除最后一页且最后一页无数据时，返回改页的上一页
+
+同时需要设置前端参数
+
+#### 前端部分
+
+```vue
+handleDelete(studentNo) {
+  this.request.delete("/student/delete/" + studentNo).then(res => {
+    if (res) {
+      this.$message.success("删除成功")
+      //设置删除最后一页的时候跳转
+      this.pageNum = this.pageSize
+      this.load()
+    } else {
+      this.$message.error("删除失败")
+    }
+  })
+},
+```

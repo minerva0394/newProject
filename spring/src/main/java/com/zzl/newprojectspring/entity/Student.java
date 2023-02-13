@@ -1,9 +1,6 @@
 package com.zzl.newprojectspring.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sun.istack.internal.NotNull;
@@ -25,18 +22,11 @@ public class Student implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 学生id，唯一
-     */
-    @ApiModelProperty(value = "学生id",required = false)
-    @TableId(type = IdType.AUTO)
-    private Integer id;
-
-    /**
      * 学生学号，要唯一，不能重复
      */
-    @ApiModelProperty(value = "学生学号",required = false)
-    @TableField("studentNo")
-    private String studentNo;
+    @ApiModelProperty(value = "学生学号")
+    @TableId(value = "studentNo",type = IdType.AUTO)
+    private Integer studentNo;
 
     /**
      * 学生登录密码
@@ -87,5 +77,12 @@ public class Student implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField("createTime")
     private Timestamp createTime;
+
+    /**
+     * 逻辑删除符号位
+     */
+    @ApiModelProperty(value = "是否删除，0=存在，1=删除")
+    @TableLogic
+    private Integer deleted;
 
 }
