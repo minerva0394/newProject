@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const request = axios.create({
+    // todo 使用服务器记得改ip
     baseURL: 'http://localhost:8085',
     timeout: 5000
 })
