@@ -44,7 +44,7 @@
       <el-table-column prop="gpa" label="绩点"></el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
-        <!--推送测试-->
+        <!--推送测试3213-->
           <el-button type="success" @click="handleEdit(scope.row)">编辑<i class="el-icon-edit"></i></el-button>
           <el-popconfirm
               class="ml-5"
