@@ -63,6 +63,9 @@ public class User implements Serializable {
     @TableLogic
     private String deleted;
 
+    @ApiModelProperty("绩点")
+    private float gpa;
+
 
 
 
