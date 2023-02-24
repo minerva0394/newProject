@@ -7,6 +7,7 @@ import com.example.springboot.common.Result;
 import com.example.springboot.entity.Role;
 import com.example.springboot.service.IRoleService;
 import io.swagger.models.auth.In;
+import org.apache.commons.collections4.Get;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -33,13 +34,14 @@ public class RoleController {
         return Result.success();
     }
 
-    @DeleteMapping("/{id}")
+
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public Result delete(@PathVariable Integer id) {
         roleService.removeById(id);
         return Result.success();
     }
 
-    @PostMapping("/del/batch")
+    @RequestMapping(path = "/del/batch", method = RequestMethod.POST)
     public Result deleteBatch(@RequestBody List<Integer> ids) {
         roleService.removeByIds(ids);
         return Result.success();
@@ -50,36 +52,39 @@ public class RoleController {
         return Result.success(roleService.list());
     }
 
-    @GetMapping("/{id}")
+
+    @RequestMapping(path = "/{id}", method = RequestMethod.GET)
     public Result findOne(@PathVariable Integer id) {
         return Result.success(roleService.getById(id));
     }
 
-    @GetMapping("/page")
+    @RequestMapping(path = "/page", method = RequestMethod.GET)
     public Result findPage(@RequestParam String name,
                            @RequestParam Integer pageNum,
                            @RequestParam Integer pageSize) {
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like("name",name);
+        queryWrapper.like("name", name);
         queryWrapper.orderByDesc("id");
-        return Result.success(roleService.page(new Page<>(pageNum, pageSize), queryWrapper));
+        Object data = roleService.page(new Page<>(pageNum, pageSize), queryWrapper);
+        return Result.success(data);
     }
 
     /**
      * 绑定角色菜单关系
+     *
      * @param roleId
      * @param menuIds
      * @return
      */
     @PostMapping("/roleMenu/{roleId}")
-    public Result roleMenu(@PathVariable Integer roleId, @RequestBody List<Integer> menuIds){
+    public Result roleMenu(@PathVariable Integer roleId, @RequestBody List<Integer> menuIds) {
         roleService.setRoleMenu(roleId, menuIds);
 
         return Result.success();
     }
 
     @GetMapping("/roleMenu/{roleId}")
-    public Result getRoleMenu(@PathVariable Integer roleId){
+    public Result getRoleMenu(@PathVariable Integer roleId) {
 
         return Result.success(roleService.getRoleMenu(roleId));
     }

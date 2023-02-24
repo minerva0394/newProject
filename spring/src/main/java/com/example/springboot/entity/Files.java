@@ -2,6 +2,7 @@ package com.example.springboot.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -14,7 +15,8 @@ public class Files {
     private String type;
     private long size;
     private String url;
-    private Boolean isDelete;
+    @TableLogic
+    private Boolean deleted;
     private Boolean enable;
     private String md5;
 }

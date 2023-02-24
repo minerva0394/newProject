@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.springboot.common.Result;
 import com.example.springboot.entity.Files;
 import com.example.springboot.mapper.FileMapper;
+import com.example.springboot.service.IFileService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +35,9 @@ public class FileController {
 
     @Resource
     private FileMapper fileMapper;
+
+    @Resource
+    private IFileService iFileService;
 
     /**
      * 文件上传接口
@@ -126,11 +130,11 @@ public class FileController {
         return Result.success(fileMapper.updateById(files));
     }
 
-    @DeleteMapping("/{id}")
+    @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public Result delete(@PathVariable Integer id) {
         Files files = fileMapper.selectById(id);
-        files.setIsDelete(true);
-        fileMapper.updateById(files);
+        files.setDeleted(true);
+        iFileService.removeById(files);
         return Result.success();
     }
 
@@ -141,7 +145,7 @@ public class FileController {
         queryWrapper.in("id", ids);
         List<Files> files = fileMapper.selectList(queryWrapper);
         for (Files file : files) {
-            file.setIsDelete(true);
+            file.setDeleted(true);
             fileMapper.updateById(file);
         }
         return Result.success();
@@ -161,7 +165,7 @@ public class FileController {
 
         QueryWrapper<Files> queryWrapper = new QueryWrapper<>();
         // 查询未删除的记录
-        queryWrapper.eq("is_delete", false);
+        queryWrapper.eq("deleted", false);
         queryWrapper.orderByDesc("id");
         if (!"".equals(name)) {
             queryWrapper.like("name", name);
