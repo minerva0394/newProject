@@ -1,7 +1,7 @@
 <template>
   <div class="wrapper">
     <div class="loginTest"
-         style="margin: 200px auto; background-color: rgba(255,255,255,0.65); width: 350px; height: 360px; padding: 20px; border-radius: 10px;">
+         style="margin: 200px auto; background-color: rgba(255,255,255,0.65); width: 350px; height: 400px; padding: 20px; border-radius: 10px;">
       <div style="margin: 20px 0; text-align: center; font-size: 24px;color: #587284FF"><b>登 录</b></div>
       <el-form :model="user" :rules="rules" ref="userForm">
         <el-form-item prop="username">
