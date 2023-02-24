@@ -26,7 +26,7 @@ public class CodeGenerator {
                 .packageConfig(builder -> {
                     builder.parent("com.example.springboot") // 设置父包名
                             .moduleName(null) // 设置父包模块名
-                            .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "/Users/zengzl/Desktop/snewProject/spring/src/main/java/com/example/springboot/mapper")); // 设置mapperXml生成路径
+                            .pathInfo(Collections.singletonMap(OutputFile.mapperXml, "/Users/zengzl/Desktop/newProject/spring/src/main/java/com/example/springboot/mapper")); // 设置mapperXml生成路径
                 })
                 .strategyConfig(builder -> {
                     builder.entityBuilder().enableLombok();

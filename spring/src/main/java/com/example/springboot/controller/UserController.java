@@ -158,7 +158,7 @@ public class UserController {
                                @RequestParam Integer pageSize,
                                @RequestParam(defaultValue = "") String username,
                                @RequestParam(defaultValue = "") String email,
-                               @RequestParam(defaultValue = "") String address
+                               @RequestParam(defaultValue = "") String college
     ) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("id");
@@ -168,8 +168,8 @@ public class UserController {
         if (!"".equals(email)) {
             queryWrapper.like("email", email);
         }
-        if (!"".equals(address)) {
-            queryWrapper.like("address", address);
+        if (!"".equals(college)) {
+            queryWrapper.like("college", college);
         }
 
         // 获取当前用户信息
@@ -197,9 +197,11 @@ public class UserController {
         writer.addHeaderAlias("nickname", "昵称");
         writer.addHeaderAlias("email", "邮箱");
         writer.addHeaderAlias("phone", "电话");
-        writer.addHeaderAlias("address", "学籍");
+        writer.addHeaderAlias("college", "学院");
+        writer.addHeaderAlias("major", "专业");
         writer.addHeaderAlias("createTime", "创建时间");
         writer.addHeaderAlias("avatar", "头像");
+        writer.addHeaderAlias("deleted", "是否删除");
         // 一次性将数据写到Excel
         writer.write(list, true);
         //列宽自适应
@@ -233,7 +235,8 @@ public class UserController {
         rowHead.put("nickname","此处输入学生/老师的姓名");
         rowHead.put("email","此处输入学生/老师姓名的邮箱");
         rowHead.put("phone","此处输入学生/老师姓名的电话");
-        rowHead.put("address","此处输入学生/老师姓名的学籍");
+        rowHead.put("college","此处输入学生/老师姓名的学院");
+        rowHead.put("major","此处输入学生/老师姓名的专业");
         ArrayList<Map<String, Object>> rows = CollUtil.newArrayList(rowHead);
         // 一次性将数据写到Excel
         writer.write(rows, true);

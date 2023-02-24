@@ -1,9 +1,6 @@
 package com.example.springboot.entity;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -46,11 +43,11 @@ public class User implements Serializable {
     @ApiModelProperty("邮箱")
     private String email;
 
-    @ApiModelProperty("电话")
-    private String phone;
+    @ApiModelProperty("学院")
+    private String college;
 
-    @ApiModelProperty("地址")
-    private String address;
+    @ApiModelProperty("专业")
+    private String major;
 
     @ApiModelProperty("创建时间")
     @TableField(value = "createTime")
@@ -61,6 +58,12 @@ public class User implements Serializable {
 
     @ApiModelProperty("角色")
     private String role;
+
+    @ApiModelProperty("是否删除")
+    @TableLogic
+    private String deleted;
+
+
 
 
 

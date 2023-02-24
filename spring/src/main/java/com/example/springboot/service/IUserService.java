@@ -16,7 +16,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IUserService extends IService<User> {
 
-    Page<User> findPage(Page<User> objectPage, String username, String email, String address);
+    Page<User> findPage(Page<User> objectPage, String username, String email, String college);
 
     UserDto login(UserDto userDto);
 

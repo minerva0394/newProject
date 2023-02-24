@@ -14,6 +14,6 @@ import org.apache.ibatis.annotations.Param;
  */
 public interface UserMapper extends BaseMapper<User> {
 
-    Page<User> findPage(Page<User> page, @Param("username") String username, @Param("email") String email, @Param("address") String address);
+    Page<User> findPage(Page<User> page, @Param("username") String username, @Param("email") String email, @Param("college") String college);
 
 }
