@@ -28,6 +28,6 @@ import java.util.List;
  */
 @Service
 public class FileServiceImpl extends ServiceImpl<FileMapper, Files> implements IFileService {
-    
+
 
 }

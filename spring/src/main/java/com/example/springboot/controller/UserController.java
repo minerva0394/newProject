@@ -45,16 +45,17 @@ public class UserController {
 
     /**
      * 用户登录
+     *
      * @param userDto
      * @return
      */
     @ApiOperation("用户登录")
-    @PostMapping("/login")
-    public Result login(@RequestBody UserDto userDto){
+    @RequestMapping(path = "/login", method = RequestMethod.POST)
+    public Result login(@RequestBody UserDto userDto) {
         String username = userDto.getUsername();
         String password = userDto.getPassword();
-        if(StrUtil.isBlank(username) || StrUtil.isBlank(password)){
-            return Result.error(Constants.CODE_400,"参数错误");
+        if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
+            return Result.error(Constants.CODE_400, "参数错误");
         }
         UserDto dto = userService.login(userDto);
         return Result.success(dto);
@@ -62,22 +63,24 @@ public class UserController {
 
     /**
      * 用户注册
+     *
      * @param userDto
      * @return
      */
     @ApiOperation("用户注册")
-    @PostMapping("/register")
-    public Result register(@RequestBody UserDto userDto){
+    @RequestMapping(path = "/register", method = RequestMethod.POST)
+    public Result register(@RequestBody UserDto userDto) {
         String username = userDto.getUsername();
         String password = userDto.getPassword();
-        if(StrUtil.isBlank(username) || StrUtil.isBlank(password)){
-            return Result.error(Constants.CODE_400,"参数错误");
+        if (StrUtil.isBlank(username) || StrUtil.isBlank(password)) {
+            return Result.error(Constants.CODE_400, "参数错误");
         }
         return Result.success(userService.register(userDto));
     }
 
     /**
      * 新增或更新
+     *
      * @param user
      * @return
      */
@@ -89,6 +92,7 @@ public class UserController {
 
     /**
      * 删除用户信息
+     *
      * @param id
      * @return
      */
@@ -100,17 +104,19 @@ public class UserController {
 
     /**
      * 多用户删除
+     *
      * @param ids
      * @return
      */
     @ApiOperation("批量删除")
-    @PostMapping("/del/batch")
+    @RequestMapping(path = "/del/batch", method = RequestMethod.POST)
     public Result deleteBatch(@RequestBody List<Integer> ids) {
         return Result.success(userService.removeByIds(ids));
     }
 
     /**
      * 返回所有用户信息
+     *
      * @return
      */
     @GetMapping
@@ -121,22 +127,24 @@ public class UserController {
 
     /**
      * 根据id查询用户
+     *
      * @param id
      * @return
      */
     @ApiOperation("根据ID查询用户")
-    @GetMapping("/{id}")
+    @RequestMapping(path = "/{id}",method = RequestMethod.GET)
     public Result findOne(@PathVariable Integer id) {
         return Result.success(userService.getById(id));
     }
 
     /**
      * 给前端传值
+     *
      * @param username
      * @return
      */
     @ApiOperation("根据ID查询用户")
-    @GetMapping("/username/{username}")
+    @RequestMapping(path = "/username/{username}",method = RequestMethod.GET)
     public Result findOne(@PathVariable String username) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("username", username);
@@ -145,31 +153,30 @@ public class UserController {
 
     /**
      * 查找用户信息，实现分页功能
+     *
      * @param pageNum
      * @param pageSize
-     * @param username
-     * @param email
-     * @param address
+     * @param nickname
      * @return
      */
     @ApiOperation("查找用户信息，实现分页功能")
-    @GetMapping("/page")
+    @RequestMapping(path = "/page",method = RequestMethod.GET)
     public Result findPage(@RequestParam Integer pageNum,
-                               @RequestParam Integer pageSize,
-                               @RequestParam(defaultValue = "") String username,
-                               @RequestParam(defaultValue = "") String email,
-                               @RequestParam(defaultValue = "") String college
+                           @RequestParam Integer pageSize,
+                           @RequestParam(defaultValue = "") String username,
+                           @RequestParam(defaultValue = "") String nickname,
+                           @RequestParam(defaultValue = "") String major
     ) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("id");
+        if (!"".equals(nickname)) {
+            queryWrapper.like("nickname", nickname);
+        }
         if (!"".equals(username)) {
             queryWrapper.like("username", username);
         }
-        if (!"".equals(email)) {
-            queryWrapper.like("email", email);
-        }
-        if (!"".equals(college)) {
-            queryWrapper.like("college", college);
+        if (!"".equals(major)) {
+            queryWrapper.like("major", major);
         }
 
         // 获取当前用户信息
@@ -181,11 +188,12 @@ public class UserController {
 
     /**
      * 用户信息导出接口
+     *
      * @param response
      * @throws Exception
      */
     @ApiOperation("用户信息导出")
-    @GetMapping("/export")
+    @RequestMapping(path = "/export",method = RequestMethod.GET)
     public void export(HttpServletResponse response) throws Exception {
         // 查询所有数据
         List<User> list = userService.list();
@@ -217,26 +225,28 @@ public class UserController {
         writer.close();
 
     }
+
     /**
      * 模板导出接口
+     *
      * @param response
      * @throws Exception
      */
     @ApiOperation("用户信息导出")
-    @GetMapping("/exportExample")
+    @RequestMapping(path = "/exportExample",method = RequestMethod.GET)
     public void exportExample(HttpServletResponse response) throws Exception {
         // 查询所有数据
         List<User> list = new ArrayList<>();
         // 内存写出到浏览器
         ExcelWriter writer = ExcelUtil.getWriter(true);
         Map<String, Object> rowHead = new LinkedHashMap<>();
-        rowHead.put("username","此处输入学生/老师的学号");
-        rowHead.put("password","此处输入学生/老师的密码");
-        rowHead.put("nickname","此处输入学生/老师的姓名");
-        rowHead.put("email","此处输入学生/老师姓名的邮箱");
-        rowHead.put("phone","此处输入学生/老师姓名的电话");
-        rowHead.put("college","此处输入学生/老师姓名的学院");
-        rowHead.put("major","此处输入学生/老师姓名的专业");
+        rowHead.put("username", "此处输入学生/老师的学号");
+        rowHead.put("password", "此处输入学生/老师的密码");
+        rowHead.put("nickname", "此处输入学生/老师的姓名");
+        rowHead.put("email", "此处输入学生/老师姓名的邮箱");
+        rowHead.put("phone", "此处输入学生/老师姓名的电话");
+        rowHead.put("college", "此处输入学生/老师姓名的学院");
+        rowHead.put("major", "此处输入学生/老师姓名的专业");
         ArrayList<Map<String, Object>> rows = CollUtil.newArrayList(rowHead);
         // 一次性将数据写到Excel
         writer.write(rows, true);
@@ -256,11 +266,12 @@ public class UserController {
 
     /**
      * 用户信息导入接口
+     *
      * @param file
      * @throws Exception
      */
     @ApiOperation("用户信息导入")
-    @PostMapping("/import")
+    @RequestMapping(path = "/import",method = RequestMethod.POST)
     public Result importUserInfo(MultipartFile file) throws Exception {
         InputStream inputStream = file.getInputStream();
         ExcelReader reader = ExcelUtil.getReader(inputStream);
