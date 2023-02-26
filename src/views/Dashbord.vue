@@ -2,23 +2,26 @@
   <div>
     <div>
       <el-row>
-        <el-col :span="4">&nbsp;</el-col>
-        <el-col :span="8" class="table-header">成绩(输入百分之成绩)</el-col>
+        <el-col :span="3">&nbsp;</el-col>
+        <el-col :span="8" class="table-header">成绩(输入百分制成绩)</el-col>
         <el-col :span="8" class="table-header">学分(不是绩点，是学分)</el-col>
       </el-row>
       <transition-group>
         <div class="row-item" v-for="(item, index) in input" :key="item">
           <el-form :model="item" :rules="rules" ref="item">
             <el-row :gutter="10">
-              <el-col :span="4" class="table-header">
+              <el-col :span="2" class="table-header">
                 科目{{ index + 1 }}
               </el-col>
-              <el-col :span="8">
+              <el-col :span="3" style="">
+                <el-input v-model="item.courseName" placeholder="请输入课程名"></el-input>
+              </el-col>
+              <el-col :span="6">
                 <el-form-item prop="grade">
                   <el-input v-model="item.grade"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="8">
+              <el-col :span="6">
                 <el-form-item prop="credit">
                   <el-input v-model="item.credit"></el-input>
                 </el-form-item>
@@ -31,17 +34,17 @@
         </div>
       </transition-group>
       <el-row class="controler-wrapper">
-        <el-col :span="4">&nbsp;</el-col>
+        <el-col :span="2">&nbsp;</el-col>
         <el-col :span="20">
           <div @click="calculateGPA()" class="query-dialog-controler">
-            <query-result-dialog :statusNo="queryStatusNo" :gpa="gpa" ></query-result-dialog>
+            <query-result-dialog :statusNo="queryStatusNo" :gpa="gpa"></query-result-dialog>
           </div>
           <el-button @click="addItem()">新增科目</el-button>
           <el-button @click="resetInput()">重置</el-button>
         </el-col>
       </el-row>
     </div>
-    <el-row >
+    <el-row>
       <el-col :span="12">
         <div id="main" style="weight:500px;height: 600px;"></div>
       </el-col>
@@ -54,15 +57,15 @@
 
 <script>
 import * as echarts from 'echarts';
-import queryResultDialog from  '../views/queryResult/queryResult.vue';
+import queryResultDialog from '../views/queryResult/queryResult.vue';
 
 const STATUS_OK = 0
 const STATUS_ERR = 1
 const STATUS_EMPTY = 2
 
-let checkGrade = function(rules, value, callback) {
+let checkGrade = function (rules, value, callback) {
   let grade = parseInt(value, 10)
-  setTimeout(function() {
+  setTimeout(function () {
     if (!Number.isInteger(grade) && value !== '') {
       callback(new Error('请输入数字值'))
     } else {
@@ -74,9 +77,9 @@ let checkGrade = function(rules, value, callback) {
     }
   }, 800)
 }
-let checkCredit = function(rules, value, callback) {
+let checkCredit = function (rules, value, callback) {
   let credit = parseInt(value, 10)
-  setTimeout(function() {
+  setTimeout(function () {
     if (!Number.isInteger(credit) && value !== '') {
       callback(new Error('请输入数字值'))
     } else {
@@ -90,7 +93,7 @@ let checkCredit = function(rules, value, callback) {
 }
 
 export default {
-  components:{
+  components: {
     'query-result-dialog': queryResultDialog
   },
   name: "Dashbord",
@@ -129,7 +132,7 @@ export default {
       }
     }
   },
-  methods:{
+  methods: {
     addItem() {
       if (this.stopRemove) {
         this.stopRemove = false
@@ -155,18 +158,19 @@ export default {
     },
     getGpaFromPoint(point) {
       let gpa = 0
+      let remainder = point % 10
       switch (true) {
         case (point <= 100) && (point >= 90):
-          gpa = 4
+          gpa = 5 - (1 - remainder / 10)
           break
         case (point < 90) && (point >= 80):
-          gpa = 3
+          gpa = 4 - (1 - remainder / 10)
           break
         case (point < 80) && (point >= 70):
-          gpa = 2
+          gpa = 3 - (1 - remainder / 10)
           break
         case (point < 70) && (point >= 60):
-          gpa = 1
+          gpa = 2 - (1 - remainder / 10)
           break
         case (point < 60) && (point >= 0):
           gpa = 0
@@ -184,8 +188,10 @@ export default {
       let down = 0
       let input = this.input
       let getGpaFromPoint = this.getGpaFromPoint
-      console.log("进入循环,rowNum="+this.rowNum)
+      console.log("测试计算2/10=" + 2 / 10)
+      console.log("进入循环,rowNum=" + this.rowNum)
       for (i = 0; i < this.rowNum; i++) {
+        // grade = 百分制成绩 credit = 绩点
         if (input[i].grade === '' && input[i].credit === '') {
           continue
         }
@@ -196,16 +202,16 @@ export default {
           flag = 0
           break
         }
-        console.log("此时的input[i].grade="+this.input[i].grade)
-        console.log("此时的input[i].credit="+this.input[i].credit)
-        console.log("此时的flag="+flag)
+        console.log("此时的input[i].grade=" + this.input[i].grade)
+        console.log("此时的input[i].credit=" + this.input[i].credit)
+        console.log("此时的flag=" + flag)
       }
       if (flag === 0) {
         this.queryStatusNo = STATUS_ERR
-        console.log("程序错误"+this.queryStatusNo)
+        console.log("程序错误" + this.queryStatusNo)
       } else if (isNaN(up * 4 / down * 100)) {
         this.queryStatusNo = STATUS_EMPTY
-        console.log("空表报警"+this.queryStatusNo)
+        console.log("空表报警" + this.queryStatusNo)
       } else {
         this.queryStatusNo = STATUS_OK
         this.gpa = (up / down).toFixed(2)
@@ -323,21 +329,26 @@ export default {
 }
 </script>
 
-<style lang="stylus"  rel="stylesheet/stylus" scoped>
+<style lang="stylus" rel="stylesheet/stylus" scoped>
 @import "../common/stylus/mixin.styl"
 .table-header
   text-align center
   font-size 1.2em
   line-height 36px
+
 .controler-wrapper
   padding-bottom 300px
+
   .query-dialog-controler
     display inline-block
     margin-right 10px
+
 .slide-enter-active
   transition all .65s ease
+
 .slide-leave-active
   transition all .65s ease
+
 .slide-enter,
 .slide-leave-active
   transform translate3d(500px, 0, 0)
