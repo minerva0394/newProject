@@ -19,6 +19,14 @@ public class UserDto {
     private String password;
     private String nickname;
     private String avatar;
+    private double gpa1st;
+    private double gpa2nd;
+    private double gpa3rd;
+    private double gpa4th;
+    private double gpa5th;
+    private double gpa6th;
+    private double gpa7th;
+    private double gpa8th;
 
     private String token;
     private List<Menu> menus;

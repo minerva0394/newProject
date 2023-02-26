@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import java.io.Serializable;
 import java.util.Date;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -64,8 +65,28 @@ public class User implements Serializable {
     private String deleted;
 
     @ApiModelProperty("绩点")
-    private float gpa;
+    private double gpa1st;
 
+    @ApiModelProperty("第二学期绩点")
+    private double gpa2nd;
+
+    @ApiModelProperty("第三学期绩点")
+    private double gpa3rd;
+
+    @ApiModelProperty("第四学期绩点")
+    private double gpa4th;
+
+    @ApiModelProperty("第五学期绩点")
+    private double gpa5th;
+
+    @ApiModelProperty("第六学期绩点")
+    private double gpa6th;
+
+    @ApiModelProperty("第七学期绩点")
+    private double gpa7th;
+
+    @ApiModelProperty("第八学期绩点")
+    private double gpa8th;
 
 
 

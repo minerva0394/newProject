@@ -32,33 +32,28 @@ public class EchartsController {
     }
 
 
-    @GetMapping("/members")
+    @GetMapping("/haveGPA")
     public Result members() {
         List<User> list = userService.list();
-        int q1 = 0;
-        int q2 = 0;
-        int q3 = 0;
-        int q4 = 0;
+        // todo 改为已有绩点记录 ，q1对应第一学期
+        double q1 = 0;
+        double q2 = 0;
+        double q3 = 0;
+        double q4 = 0;
+        double q5 = 0;
+        double q6 = 0;
+        double q7 = 0;
+        double q8 = 0;
         for (User user : list) {
-            Date createTime = user.getCreateTime();
-            Quarter quarter = DateUtil.quarterEnum(createTime);
-            switch (quarter) {
-                case Q1:
-                    q1 += 1;
-                    break;
-                case Q2:
-                    q2 += 1;
-                    break;
-                case Q3:
-                    q3 += 1;
-                    break;
-                case Q4:
-                    q4 += 1;
-                    break;
-                default:
-                    break;
-            }
+            q1 = user.getGpa1st();
+            q2 = user.getGpa2nd();
+            q3 = user.getGpa3rd();
+            q4 = user.getGpa4th();
+            q5 = user.getGpa5th();
+            q6 = user.getGpa6th();
+            q7 = user.getGpa7th();
+            q8 = user.getGpa8th();
         }
-        return Result.success(CollUtil.newArrayList(q1, q2, q3, q4));
+        return Result.success(CollUtil.newArrayList(q1, q2, q3, q4, q5, q6, q7, q8));
     }
 }
