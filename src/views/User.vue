@@ -41,7 +41,7 @@
       <el-table-column prop="email" label="邮箱"></el-table-column>
       <el-table-column prop="college" label="学院"></el-table-column>
       <el-table-column prop="major" label="专业"></el-table-column>
-      <el-table-column prop="gpa" label="绩点"></el-table-column>
+      <el-table-column prop="gpa1st" label="绩点"></el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
         <!--推送测试3213-->
@@ -97,8 +97,8 @@
         <el-form-item label="专业">
           <el-input v-model="form.major" autocomplete="off" clearable></el-input>
         </el-form-item>
-        <el-form-item label="学籍">
-          <el-input type="textarea" v-model="form.address" autocomplete="off" clearable></el-input>
+        <el-form-item label="绩点">
+          <el-input v-model="form.gpa1st" autocomplete="off" clearable></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -121,6 +121,7 @@ export default {
       username: "",
       nickname: "",
       major: "",
+      gpa1st:"",
       college:"",
       form: {},
       dialogFormVisible: false,
@@ -142,6 +143,7 @@ export default {
           email: this.email,
           college: this.college,
           major: this.major,
+          gpa1st: this.gpa1st
         }
       }).then(res => {
         console.log(res)
@@ -205,6 +207,8 @@ export default {
       this.nickname = ""
       this.email = ""
       this.major = ""
+      this.gpa1st
+        = ""
       this.load()
     },
     handleSizeChange(pageSize) {
