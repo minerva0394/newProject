@@ -18,18 +18,8 @@
       <el-table-column prop="achievement" label="成绩" align="center"></el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
-          <!--推送测试3213-->
-          <el-button type="success" @click="handleEdit(scope.row)">查看<i class="el-icon-edit"></i></el-button>
-          <el-popconfirm
-            class="ml-5"
-            confirm-button-text='确定'
-            cancel-button-text='我再想想'
-            icon="el-icon-info"
-            icon-color="red"
-            title="您确定删除吗？"
-            @confirm="del(scope.row.id)"
-          >
-          </el-popconfirm>
+          <el-button type="success" @click="handleEdit(scope.row)">查看<i class="el-icon-search"></i></el-button>
+
         </template>
       </el-table-column>
     </el-table>
@@ -44,6 +34,36 @@
         :total="total">
       </el-pagination>
     </div>
+
+    <el-dialog title="成绩信息" :visible.sync="dialogFormVisible" width="30%">
+      <el-form label-width="80px" size="large">
+        <el-form-item label="课程名">
+          <el-input v-model="form.courseName" autocomplete="off" readonly ></el-input>
+        </el-form-item>
+        <el-form-item label="学年">
+          <el-input v-model="form.academicYear" autocomplete="off" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="学期">
+          <el-input v-model="form.semester" autocomplete="off" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="成绩">
+          <el-input v-model="form.achievement" autocomplete="off" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="绩点">
+          <el-input v-model="form.performancePoint" autocomplete="off" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="任课老师">
+          <el-input v-model="form.teacherName" autocomplete="off" readonly></el-input>
+        </el-form-item>
+        <el-form-item label="考核方式">
+          <el-input v-model="form.assessmentMethods" autocomplete="off" readonly></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="save">确 定</el-button>
+      </div>
+    </el-dialog>
 
   </div>
 </template>
@@ -68,8 +88,6 @@ export default {
       },
       expends: [],
       checks: [],
-      roleId: 0,
-      roleFlag: '',
       ids: [],
       user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
     }
@@ -78,6 +96,9 @@ export default {
     this.load()
   },
   methods: {
+    formatRound(num) {
+      return (Math.round(num * 100) / 100).toFixed(2);
+    },
     rounding(row, column) {
       return parseFloat(row[column.property]).toFixed(1)
     },
@@ -99,33 +120,8 @@ export default {
       })
 
     },
-    save() {
-      this.request.post("/role", this.form).then(res => {
-        if (res.code === '200') {
-          this.$message.success("保存成功")
-          this.dialogFormVisible = false
-          this.load()
-        } else {
-          this.$message.error("保存失败")
-        }
-      })
-    },
-    saveRoleMenu() {
-      this.request.post("/role/roleMenu/" + this.roleId, this.$refs.tree.getCheckedKeys()).then(res => {
-        if (res.code === '200') {
-          this.$message.success("绑定成功")
-          this.menuDialogVis = false
 
-          // 操作管理员角色后需要重新登录
-          if (this.roleFlag === 'ROLE_ADMIN') {
-            this.$store.commit("logout")
-          }
 
-        } else {
-          this.$message.error(res.msg)
-        }
-      })
-    },
     handleAdd() {
       this.dialogFormVisible = true
       this.form = {}
@@ -134,31 +130,12 @@ export default {
       this.form = JSON.parse(JSON.stringify(row))
       this.dialogFormVisible = true
     },
-    del(id) {
-      this.request.delete("/role/" + id).then(res => {
-        if (res.code === '200') {
-          this.$message.success("删除成功")
-          this.load()
-        } else {
-          this.$message.error("删除失败")
-        }
-      })
-    },
+
     handleSelectionChange(val) {
       console.log(val)
       this.multipleSelection = val
     },
-    delBatch() {
-      let ids = this.multipleSelection.map(v => v.id)  // [{}, {}, {}] => [1,2,3]
-      this.request.post("/role/del/batch", ids).then(res => {
-        if (res.code === '200') {
-          this.$message.success("批量删除成功")
-          this.load()
-        } else {
-          this.$message.error("批量删除失败")
-        }
-      })
-    },
+
     reset() {
       this.name = ""
       this.load()
@@ -173,31 +150,7 @@ export default {
       this.pageNum = pageNum
       this.load()
     },
-    async selectMenu(role) {
-      this.roleId = role.id
-      this.roleFlag = role.flag
 
-      // 请求菜单数据
-      this.request.get("/menu").then(res => {
-        this.menuData = res.data
-
-        // 把后台返回的菜单数据处理成 id数组
-        this.expends = this.menuData.map(v => v.id)
-      })
-
-      this.request.get("/role/roleMenu/" + this.roleId).then(res => {
-        this.checks = res.data
-        this.ids.forEach(id => {
-          if (!this.checks.includes(id)) {
-            // 可能会报错：Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'setChecked')
-            this.$nextTick(() => {
-              this.$refs.tree.setChecked(id, false)
-            })
-          }
-        })
-        this.menuDialogVis = true
-      })
-    },
   }
 }
 </script>
@@ -207,4 +160,5 @@ export default {
 .headerBg {
   background: #eee !important;
 }
+
 </style>
