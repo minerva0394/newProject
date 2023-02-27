@@ -1,0 +1,48 @@
+server:
+  ip: localhost
+  # 远端ip
+  #  ip: 120.24.6.28
+  port: 9091
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #    url: jdbc:mysql://120.24.6.28:3306/newspringboot?serverTimezone=GMT%2b8
+    #    username: newspringboot
+    #    password: 123456
+    url: jdbc:mysql://localhost:3306/new_springboot?serverTimezone=GMT%2b8
+    username: root
+    password: zzlde500
+  # springboot 设置文件上传大小和请求文件大小
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 100MB
+mybatis:
+  mapper-locations: classpath:mapper/*.xml  #扫描所有mybatis的xml文件
+
+#打印修改的sql语句log
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+
+
+#mybatis:
+#  mapper-locations: classpath:mapper/*.xml#注意：一定要对应mapper映射xml文件的所在路径
+#    configuration:
+#      map-underscore-to-camel-case: true  # 开启驼峰命名
+
+files:
+  upload:
+    #    本地
+    path: /Users/zengzl/Desktop/newProject/spring/src/main/resources/static/files/
+    # 远端
+#    path: /www/wwwroot/www.test.com/dist/files
+
+
