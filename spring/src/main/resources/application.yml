@@ -25,12 +25,18 @@ mybatis:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
   global-config:
     db-config:
       logic-delete-field: deleted
       logic-delete-value: 1
       logic-not-delete-value: 0
 
+
+#mybatis:
+#  mapper-locations: classpath:mapper/*.xml#注意：一定要对应mapper映射xml文件的所在路径
+#    configuration:
+#      map-underscore-to-camel-case: true  # 开启驼峰命名
 
 files:
   upload:
