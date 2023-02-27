@@ -44,5 +44,15 @@ public class Achievement implements Serializable {
     @ApiModelProperty("成绩")
     private double achievement;
 
+    //ToDo 点击详情才会出现的东西
+    @ApiModelProperty("课程名")
+    private String courseName;
+
+    @ApiModelProperty("任课老师姓名")
+    private String teacherName;
+
+    @ApiModelProperty("考核方式")
+    private String assessmentMethods;
+
 
 }
