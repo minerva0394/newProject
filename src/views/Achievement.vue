@@ -1,9 +1,10 @@
 <template>
   <div>
     <div style="margin: 10px 0">
-      <el-input style="width: 200px" placeholder="请输入名称" suffix-icon="el-icon-search" v-model="name"></el-input>
+      <el-input style="width: 300px" placeholder="请输入课程名" suffix-icon="el-icon-search" v-model="courseName" clearable></el-input>
       <el-button class="ml-5" type="primary" @click="load">搜索</el-button>
       <el-button type="warning" @click="reset">重置</el-button>
+      <el-button type="primary" class="ml-5" @click="exp">导出 <i class="el-icon-bottom"></i></el-button>
     </div>
 
 
@@ -13,6 +14,7 @@
       <el-table-column prop="stuNumber" label="学号" width="120" align="center"></el-table-column>
       <el-table-column prop="academicYear" label="学年" width="150" align="center"></el-table-column>
       <el-table-column prop="semester" label="学期" width="100" align="center"></el-table-column>
+      <el-table-column prop="courseName" label="课程名" width="280" align="center"></el-table-column>
       <el-table-column prop="credit" label="学分" width="180" :formatter="rounding" align="center"></el-table-column>
       <el-table-column prop="performancePoint" label="绩点" width="100" align="center"></el-table-column>
       <el-table-column prop="achievement" label="成绩" align="center"></el-table-column>
@@ -77,12 +79,11 @@ export default {
       total: 0,
       pageNum: 1,
       pageSize: 10,
+      courseName: "",
       name: "",
       form: {},
       dialogFormVisible: false,
-      menuDialogVis: false,
       multipleSelection: [],
-      menuData: [],
       props: {
         label: 'name',
       },
@@ -109,14 +110,11 @@ export default {
           pageNum: this.pageNum,
           pageSize: this.pageSize,
           username: this.username,
+          courseName: this.courseName,
         }
       }).then(res => {
         this.tableData = res.data.records
         this.total = res.data.total
-      })
-
-      this.request.get("/menu/ids").then(r => {
-        this.ids = r.data
       })
 
     },
@@ -137,7 +135,7 @@ export default {
     },
 
     reset() {
-      this.name = ""
+      this.courseName = ""
       this.load()
     },
     handleSizeChange(pageSize) {
@@ -149,6 +147,11 @@ export default {
       console.log(pageNum)
       this.pageNum = pageNum
       this.load()
+    },
+    exp() {
+      window.open("http://localhost:9091/achievement/export")
+      // TODO 上传到服务器的时候记得改
+      // window.open("http://120.24.6.28:9091/user/export")
     },
 
   }
