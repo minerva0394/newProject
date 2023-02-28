@@ -66,14 +66,54 @@ public class AchievementController {
     @RequestMapping(path = "/page/{username}",method = RequestMethod.GET)
     public Result findPage(@PathVariable String username,
                            @RequestParam Integer pageNum,
-                           @RequestParam Integer pageSize) {
+                           @RequestParam Integer pageSize,
+                           @RequestParam(defaultValue = "") String courseName) {
         QueryWrapper<Achievement> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("stu_number", username);
+        if(!"".equals(courseName)){
+            queryWrapper.like("course_name", courseName);
+        }
         return Result.success(achievementService.page(new Page<>(pageNum,pageSize),queryWrapper));
     }
 
 
+    /**
+     * 成绩导出接口
+     *
+     * @param response
+     * @throws Exception
+     */
+    @ApiOperation("用户信息导出")
+    @RequestMapping(path = "/export",method = RequestMethod.GET)
+    public void export(HttpServletResponse response) throws Exception {
+        // 查询所有数据
+        List<Achievement> list = achievementService.list();
+        // 内存写出到浏览器
+        ExcelWriter writer = ExcelUtil.getWriter(true);
+        writer.addHeaderAlias("stuNumber", "学号");
+        writer.addHeaderAlias("academicYear", "学年");
+        writer.addHeaderAlias("semester", "学期");
+        writer.addHeaderAlias("credit", "学分");
+        writer.addHeaderAlias("performancePoint", "绩点");
+        writer.addHeaderAlias("achievement", "成绩");
+        writer.addHeaderAlias("courseName", "课程名");
+        writer.addHeaderAlias("teacherName", "教师姓名");
+        writer.addHeaderAlias("assessmentMethods", "考核方式");
+        // 一次性将数据写到Excel
+        writer.write(list, true);
+        //列宽自适应
+        writer.autoSizeColumnAll();
+        // 设置浏览器响应格式
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8");
+        String fileName = URLEncoder.encode("学生成绩", "UTF-8");
+        response.setHeader("Content-Disposition", "attachment;filename=" + fileName + ".xlsx");
 
+        ServletOutputStream out = response.getOutputStream();
+        writer.flush(out, true);
+        out.close();
+        writer.close();
+
+    }
 
 
 }
