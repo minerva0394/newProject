@@ -24,10 +24,6 @@
       >
         <el-button type="danger" slot="reference">批量删除<i class="el-icon-remove-outline"></i></el-button>
       </el-popconfirm>
-      <!--      <el-upload action="http://localhost:9091/user/import" :show-file-list="false" accept="xlsx" :on-success="handleImportSuccess" style="display: inline-block">-->
-      <!--        <el-button type="primary" class="ml-5">导入 <i class="el-icon-bottom"></i></el-button>-->
-      <!--      </el-upload>-->
-      <!--      <el-button type="primary" class="ml-5" @click="exp">导出 <i class="el-icon-top"></i></el-button>-->
     </div>
 
     <el-table :data="tableData" border stripe :header-cell-class-name="'headerBg'" row-key="id" default-expand-all
@@ -198,8 +194,9 @@ export default {
       this.load()
     },
     exp() {
-      // window.open("http://120.24.6.28:9091/menu/export")
-      window.open("http://localhost:9091/menu/export")
+      //todo 发布记得换
+      window.open("http://43.139.122.43:9091/menu/export")
+      // window.open("http://localhost:9091/menu/export")
     },
     handleImportSuccess() {
       this.$message.success("文件导入成功")

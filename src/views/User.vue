@@ -14,18 +14,19 @@
     <div style="margin: 10px 0">
       <el-button type="primary" @click="handleAdd">新增 <i class="el-icon-circle-plus-outline"></i></el-button>
       <el-popconfirm
-          class="ml-5"
-          confirm-button-text='确定'
-          cancel-button-text='我再想想'
-          icon="el-icon-info"
-          icon-color="red"
-          title="您确定批量删除这些数据吗？"
-          @confirm="delBatch"
+        class="ml-5"
+        confirm-button-text='确定'
+        cancel-button-text='我再想想'
+        icon="el-icon-info"
+        icon-color="red"
+        title="您确定批量删除这些数据吗？"
+        @confirm="delBatch"
       >
         <el-button type="danger" slot="reference">批量删除<i class="el-icon-remove-outline"></i></el-button>
       </el-popconfirm>
       <el-button type="primary" class="ml-5" @click="expExample">下载用户模板 <i class="el-icon-back"></i></el-button>
-      <el-upload action="http://localhost:9091/user/import" :show-file-list="false" accept="xlsx" :on-success="handleImportSuccess" style="display: inline-block">
+      <el-upload :action="'http://'+serverIp+':9091/user/import'" :show-file-list="false" accept="xlsx"
+                 :on-success="handleImportSuccess" style="display: inline-block">
         <el-button type="primary" class="ml-5">导入 <i class="el-icon-bottom"></i></el-button>
       </el-upload>
       <el-button type="primary" class="ml-5" @click="exp">导出 <i class="el-icon-top"></i></el-button>
@@ -44,16 +45,16 @@
       <el-table-column prop="gpa1st" label="绩点"></el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template slot-scope="scope">
-        <!--推送测试3213-->
+          <!--推送测试3213-->
           <el-button type="success" @click="handleEdit(scope.row)">编辑<i class="el-icon-edit"></i></el-button>
           <el-popconfirm
-              class="ml-5"
-              confirm-button-text='确定'
-              cancel-button-text='我再想想'
-              icon="el-icon-info"
-              icon-color="red"
-              title="您确定删除吗？"
-              @confirm="del(scope.row.id)"
+            class="ml-5"
+            confirm-button-text='确定'
+            cancel-button-text='我再想想'
+            icon="el-icon-info"
+            icon-color="red"
+            title="您确定删除吗？"
+            @confirm="del(scope.row.id)"
           >
             <el-button type="danger" slot="reference">删除<i class="el-icon-remove-outline"></i></el-button>
           </el-popconfirm>
@@ -62,13 +63,13 @@
     </el-table>
     <div style="padding: 10px 0">
       <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="pageNum"
-          :page-sizes="[5, 10, 20, 50]"
-          :page-size="pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page="pageNum"
+        :page-sizes="[5, 10, 20, 50]"
+        :page-size="pageSize"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total">
       </el-pagination>
     </div>
 
@@ -110,10 +111,13 @@
 </template>
 
 <script>
+import {serverIp} from "../../public/config";
+
 export default {
   name: "User",
   data() {
     return {
+      serverIp: serverIp,
       tableData: [],
       total: 0,
       pageNum: 1,
@@ -121,8 +125,8 @@ export default {
       username: "",
       nickname: "",
       major: "",
-      gpa1st:"",
-      college:"",
+      gpa1st: "",
+      college: "",
       form: {},
       dialogFormVisible: false,
       multipleSelection: [],
@@ -153,7 +157,7 @@ export default {
 
       })
 
-      this.request.get("/role").then(res =>{
+      this.request.get("/role").then(res => {
         this.roles = res.data
       })
 
@@ -222,13 +226,15 @@ export default {
       this.load()
     },
     exp() {
-      window.open("http://localhost:9091/user/export")
-      // window.open("http://120.24.6.28:9091/user/export")
+      // todo 发布记得换
+      // window.open("http://localhost:9091/user/export")
+      window.open("http://43.139.122.43:9091/user/export")
     },
     expExample() {
-      window.open("http://localhost:9091/user/exportExample")
+      //todo 导出模板还没写完
+      // window.open("http://43.139.122.43:9091/user/exportExample")
     },
-    handleImportSuccess(){
+    handleImportSuccess() {
       this.$message.success("文件导入成功")
       this.load()
     }

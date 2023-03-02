@@ -1,7 +1,7 @@
 server:
-  ip: localhost
+#  ip: localhost
   # 远端ip
-  #  ip: 120.24.6.28
+    ip: 43.139.122.43
   port: 9091
 
 spring:

@@ -3,10 +3,10 @@
     <el-form label-width="80px" size="large">
 
       <el-upload
-          class="avatar-uploader"
-          action="http://localhost:9091/file/upload"
-          :show-file-list="false"
-          :on-success="handleAvatarSuccess">
+        class="avatar-uploader"
+        :action="'http://'+serverIp+':9091/file/upload'"
+        :show-file-list="false"
+        :on-success="handleAvatarSuccess">
         <img v-if="form.avatar" :src="form.avatar" class="avatar">
         <i v-else class="el-icon-plus avatar-uploader-icon"></i>
       </el-upload>
@@ -38,23 +38,26 @@
 </template>
 
 <script>
+import {serverIp} from "../../public/config";
+
 export default {
   name: "Person",
   data() {
     return {
+      serverIp: serverIp,
       form: {},
       user: localStorage.getItem("user") ? JSON.parse(localStorage.getItem("user")) : {}
     }
   },
   created() {
-    this.getUser().then(res =>{
+    this.getUser().then(res => {
       console.log(res)
       this.form = res
     })
 
   },
   methods: {
-    async getUser(){
+    async getUser() {
       return (await this.request.get("/user/username/" + this.user.username)).data
     },
     save() {
@@ -69,7 +72,7 @@ export default {
       })
       this.load()
     },
-    handleAvatarSuccess(res){
+    handleAvatarSuccess(res) {
       this.form.avatar = res
     }
   }
@@ -77,9 +80,10 @@ export default {
 </script>
 
 <style scoped>
-.avatar-uploader{
+.avatar-uploader {
   text-align: center;
 }
+
 .avatar-uploader .el-upload {
   border: 1px dashed #d9d9d9;
   border-radius: 6px;

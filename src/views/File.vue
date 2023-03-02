@@ -7,8 +7,7 @@
       <el-button type="warning" @click="reset">重置</el-button>
     </div>
     <div style="margin: 10px 0">
-<!--      <el-upload action="http://120.24.6.28:9091/file/upload" :show-file-list="false" :on-success="handleFileUploadSuccess" style="display: inline-block">-->
-      <el-upload action="http://localhost:9091/file/upload" :show-file-list="false" :on-success="handleFileUploadSuccess" style="display: inline-block">
+      <el-upload :action="'http://'+serverIp+':9091/file/upload'" :show-file-list="false" :on-success="handleFileUploadSuccess" style="display: inline-block">
         <el-button type="primary" class="ml-5">上传文件 <i class="el-icon-top"></i></el-button>
       </el-upload>
       <el-popconfirm
@@ -102,6 +101,7 @@
 
 <script>
 import ElImageViewer from 'element-ui/packages/image/src/image-viewer'
+import {serverIp} from "../../public/config";
 
 export default {
 
@@ -109,6 +109,7 @@ export default {
   components: {ElImageViewer},
   data() {
     return {
+      serverIp:serverIp,
       // Collections: [
       //   {id:1,status:scope.row.type == 'docx' ? false : true},
       //   {id:2,status:scope.row.type == 'xlsx' ? false : true},

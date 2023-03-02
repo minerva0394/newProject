@@ -1,7 +1,8 @@
 <template>
   <div>
     <div style="margin: 10px 0">
-      <el-input style="width: 300px" placeholder="请输入课程名" suffix-icon="el-icon-search" v-model="courseName" clearable></el-input>
+      <el-input style="width: 300px" placeholder="请输入课程名" suffix-icon="el-icon-search" v-model="courseName"
+                clearable></el-input>
       <el-button class="ml-5" type="primary" @click="load">搜索</el-button>
       <el-button type="warning" @click="reset">重置</el-button>
       <el-button type="primary" class="ml-5" @click="exp">导出 <i class="el-icon-bottom"></i></el-button>
@@ -40,7 +41,7 @@
     <el-dialog title="成绩信息" :visible.sync="dialogFormVisible" width="30%">
       <el-form label-width="80px" size="large">
         <el-form-item label="课程名">
-          <el-input v-model="form.courseName" autocomplete="off" readonly ></el-input>
+          <el-input v-model="form.courseName" autocomplete="off" readonly></el-input>
         </el-form-item>
         <el-form-item label="学年">
           <el-input v-model="form.academicYear" autocomplete="off" readonly></el-input>
@@ -61,10 +62,6 @@
           <el-input v-model="form.assessmentMethods" autocomplete="off" readonly></el-input>
         </el-form-item>
       </el-form>
-      <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
-        <el-button type="primary" @click="save">确 定</el-button>
-      </div>
     </el-dialog>
 
   </div>
@@ -149,9 +146,9 @@ export default {
       this.load()
     },
     exp() {
-      window.open("http://localhost:9091/achievement/export")
       // TODO 上传到服务器的时候记得改
-      // window.open("http://120.24.6.28:9091/user/export")
+      window.open("http://43.139.122.43:9091/achievement/export/" + this.user.username)
+      // window.open("http://localhost:9091/achievement/export/"+this.user.username)
     },
 
   }
