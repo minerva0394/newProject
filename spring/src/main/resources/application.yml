@@ -1,18 +1,20 @@
 server:
-  ip: localhost
+#  ip: localhost
   # 远端ip
-  #  ip: 120.24.6.28
-  port: 9091
+  # todo 发布记得换
+    ip: 43.139.122.43
+    port: 9091
 
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    #    url: jdbc:mysql://120.24.6.28:3306/newspringboot?serverTimezone=GMT%2b8
-    #    username: newspringboot
-    #    password: 123456
-    url: jdbc:mysql://localhost:3306/new_springboot?serverTimezone=GMT%2b8
+    # todo 发布记得换
+#    url: jdbc:mysql://localhost:3306/new_springboot?serverTimezone=GMT%2b8
+#    username: root
+#    password: zzlde500
+    url: jdbc:mysql://43.139.122.43:3306/new_springboot?serverTimezone=GMT%2b8
     username: root
-    password: zzlde500
+    password: Zzlde500
   # springboot 设置文件上传大小和请求文件大小
   servlet:
     multipart:
@@ -41,8 +43,8 @@ mybatis-plus:
 files:
   upload:
     #    本地
-    path: /Users/zengzl/Desktop/newProject/spring/src/main/resources/static/files/
+#    path: /Users/zengzl/Desktop/newProject/spring/src/main/resources/static/files/
     # 远端
-#    path: /www/wwwroot/www.test.com/dist/files
+    path: /www/wwwroot/files
 
 

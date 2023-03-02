@@ -84,10 +84,13 @@ public class AchievementController {
      * @throws Exception
      */
     @ApiOperation("用户信息导出")
-    @RequestMapping(path = "/export",method = RequestMethod.GET)
-    public void export(HttpServletResponse response) throws Exception {
+    @RequestMapping(path = "/export/{username}",method = RequestMethod.GET)
+    public void export(HttpServletResponse response,@PathVariable String username) throws Exception {
         // 查询所有数据
-        List<Achievement> list = achievementService.list();
+        QueryWrapper<Achievement> queryWrapper = new QueryWrapper<>() ;
+        queryWrapper.eq("stu_number",username);
+        List<Achievement> list =  achievementService.list(queryWrapper);
+
         // 内存写出到浏览器
         ExcelWriter writer = ExcelUtil.getWriter(true);
         writer.addHeaderAlias("stuNumber", "学号");
