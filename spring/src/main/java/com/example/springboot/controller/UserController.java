@@ -201,7 +201,6 @@ public class UserController {
         ExcelWriter writer = ExcelUtil.getWriter(true);
         writer.addHeaderAlias("id", "id");
         writer.addHeaderAlias("username", "用户名");
-        writer.addHeaderAlias("password", "密码");
         writer.addHeaderAlias("nickname", "昵称");
         writer.addHeaderAlias("email", "邮箱");
         writer.addHeaderAlias("phone", "电话");
@@ -209,7 +208,12 @@ public class UserController {
         writer.addHeaderAlias("major", "专业");
         writer.addHeaderAlias("createTime", "创建时间");
         writer.addHeaderAlias("avatar", "头像");
+        writer.addHeaderAlias("role", "角色");
         writer.addHeaderAlias("deleted", "是否删除");
+
+        // 只导出指定列
+        writer.setOnlyAlias(true);
+
         // 一次性将数据写到Excel
         writer.write(list, true);
         //列宽自适应
@@ -232,7 +236,7 @@ public class UserController {
      * @param response
      * @throws Exception
      */
-    @ApiOperation("用户信息导出")
+    @ApiOperation("用户信息模版导出")
     @RequestMapping(path = "/exportExample",method = RequestMethod.GET)
     public void exportExample(HttpServletResponse response) throws Exception {
         // 查询所有数据

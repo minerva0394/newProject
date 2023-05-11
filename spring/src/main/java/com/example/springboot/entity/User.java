@@ -57,12 +57,12 @@ public class User implements Serializable {
     @ApiModelProperty("头像")
     private String avatar;
 
-    @ApiModelProperty("角色")
-    private String role;
-
     @ApiModelProperty("是否删除")
     @TableLogic
     private String deleted;
+
+    @ApiModelProperty("角色")
+    private String role;
 
     @ApiModelProperty("绩点")
     private double gpa1st;
